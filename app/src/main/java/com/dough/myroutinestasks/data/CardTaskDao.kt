@@ -1,9 +1,6 @@
 package com.dough.myroutinestasks.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,9 +10,13 @@ interface CardTaskDao {
     fun getAlphabetizedCardTask(): Flow<List<CardTask>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(cardTask: CardTask)
+    suspend fun insertCard(cardTask: CardTask)
 
     @Query("DELETE FROM card_table")
     suspend fun deleteAll()
+
+    @Transaction
+    @Query("SELECT * FROM card_table")
+    fun getCardWithItemTask(): Flow<List<CardAndItemTasks>>
 
 }

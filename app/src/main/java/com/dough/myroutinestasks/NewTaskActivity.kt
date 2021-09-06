@@ -32,13 +32,13 @@ class NewTaskActivity : AppCompatActivity() {
                 setResult(Activity.RESULT_CANCELED, replyIntent)
             }else{
                 val task = CardTask(
-                id = intent.getIntExtra(EXTRA_REPLY,0),
+                id = intent.getLongExtra(EXTRA_REPLY,0),
                 cardTitle = editTaskView.text.toString(),
                 cardDescription = "",
                 cardDate = "",
                 cardHour = ""
                 )
-                taskViewModel.insert(task)
+                taskViewModel.insertCard(task)
                 setResult(Activity.RESULT_OK,replyIntent)
 
             }

@@ -6,32 +6,30 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dough.myroutinestasks.aplication.CardTaskAplication
-import com.dough.myroutinestasks.data.CardTask
 import com.dough.myroutinestasks.ui.CardTaskAdapter
 import com.dough.myroutinestasks.viewmodel.CardTaskViewModelFactory
 import com.dough.myroutinestasks.viewmodel.TaskViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class MainActivity : AppCompatActivity() {
 
     private val taskViewModel: TaskViewModel by viewModels{
         CardTaskViewModelFactory((application as CardTaskAplication).repository)
     }
-
-
     private val newTaskActivityRequestCode = 1
-
+    private var mainRecyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = CardTaskAdapter()
+        val recyclerView = findViewById<RecyclerView>(R.id.main_recycler_view)
+        val allTasks = taskViewModel.allCardsAndItemTasks
+        val adapter = CardTaskAdapter(this,allTasks)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -41,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, newTaskActivityRequestCode)
         }
 
-        taskViewModel.allTasks.observe(this)  { tasks ->
+        taskViewModel.allCardsAndItemTasks.observe(this)  { tasks ->
             tasks?.let { adapter.submitList(it) }
 
         }

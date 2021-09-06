@@ -8,10 +8,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "card_table")
     data class CardTask(
     @PrimaryKey(autoGenerate = true)
-        val id: Int = 0,
+        val id: Long = 0,
         val cardTitle: String,
         val cardDescription: String,
         val cardDate: String,
         val cardHour: String,
-    )
+    ){
+        var visibility: Boolean = false
+}
 
