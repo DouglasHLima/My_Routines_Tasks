@@ -15,8 +15,8 @@ interface CardTaskDao {
     @Query("DELETE FROM card_table")
     suspend fun deleteAll()
 
-    @Transaction
-    @Query("SELECT * FROM card_table")
-    fun getCardWithItemTask(): Flow<List<CardAndItemTasks>>
+    @Update
+    fun updateTask(vararg task: CardTask)
+
 
 }

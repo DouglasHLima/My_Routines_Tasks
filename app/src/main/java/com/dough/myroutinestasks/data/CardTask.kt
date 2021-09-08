@@ -13,7 +13,10 @@ import androidx.room.PrimaryKey
         val cardDescription: String,
         val cardDate: String,
         val cardHour: String,
+        var checked: Boolean
+
     ){
         var visibility: Boolean = false
+
 }
 

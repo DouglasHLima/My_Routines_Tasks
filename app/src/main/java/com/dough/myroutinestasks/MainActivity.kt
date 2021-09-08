@@ -21,15 +21,13 @@ class MainActivity : AppCompatActivity() {
         CardTaskViewModelFactory((application as CardTaskAplication).repository)
     }
     private val newTaskActivityRequestCode = 1
-    private var mainRecyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.main_recycler_view)
-        val allTasks = taskViewModel.allCardsAndItemTasks
-        val adapter = CardTaskAdapter(this,allTasks)
+        val adapter = CardTaskAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -39,10 +37,11 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, newTaskActivityRequestCode)
         }
 
-        taskViewModel.allCardsAndItemTasks.observe(this)  { tasks ->
+        taskViewModel.allTasks.observe(this)  { tasks ->
             tasks?.let { adapter.submitList(it) }
-
         }
+
+
     }
 
 

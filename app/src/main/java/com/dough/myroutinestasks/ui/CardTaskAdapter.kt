@@ -4,20 +4,21 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dough.myroutinestasks.data.CardAndItemTasks
-import com.dough.myroutinestasks.data.ItemTask
+import com.dough.myroutinestasks.aplication.CardTaskAplication
+import com.dough.myroutinestasks.data.CardTask
 import com.dough.myroutinestasks.databinding.CardTaskCardviewBinding
 import com.dough.myroutinestasks.ui.CardTaskAdapter.*
+import com.dough.myroutinestasks.viewmodel.CardTaskViewModelFactory
+import com.dough.myroutinestasks.viewmodel.TaskViewModel
 
 class CardTaskAdapter(
     private val context: Context,
-    private val list: LiveData<List<CardAndItemTasks>>
-) : androidx.recyclerview.widget.ListAdapter<CardAndItemTasks, CardTaskViewHolder>(CardTaskComparator()){
-
+) : androidx.recyclerview.widget.ListAdapter<CardTask, CardTaskViewHolder>(CardTaskComparator()){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardTaskViewHolder {
@@ -30,35 +31,25 @@ class CardTaskAdapter(
         val current = getItem(position)
         holder.bind(current)
 
-        var isVisible = current.card.visibility
-        holder.binding.cvCardTaskDescription.visibility = if (isVisible) View.VISIBLE else View.GONE
-        holder.binding.rvCardTaskItems.visibility = if (isVisible) View.VISIBLE else View.GONE
-
+        var isVisible = current.visibility
+        holder.binding.tvDescription.visibility = if (isVisible) View.VISIBLE else View.GONE
         holder.binding.cvCardTask.setOnClickListener {
-            current.card.visibility = !current.card.visibility
+            current.visibility = !current.visibility
             notifyItemChanged(position)
         }
-
-
-        setCallRecyclerItemTask(holder.binding.rvCardTaskItems, current.itens)
-
+        holder.binding.checkbox.setOnClickListener {
+            current.checked = !current.checked
+        }
     }
-
-        fun setCallRecyclerItemTask(recyclerView: RecyclerView, itemTask: List<ItemTask>) {
-        val itemRecyclerAdapter = ItemTaskAdapter(itemTask)
-        recyclerView.layoutManager = LinearLayoutManager(context,RecyclerView.VERTICAL, false)
-        recyclerView.adapter = itemRecyclerAdapter
-    }
-
 
     class CardTaskViewHolder(val binding: CardTaskCardviewBinding):RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(cardTask: CardAndItemTasks) {
-            binding.cvCardTaskTitle.text = cardTask.card.cardTitle
-            binding.cvCardTaskDescription.text = cardTask.card.cardDescription
-            binding.tvCardTaskDate.text = cardTask.card.cardDate
-            binding.tvCardTaskHour.text = cardTask.card.cardHour
-            binding.rvCardTaskItems.adapter = ItemTaskAdapter(cardTask.itens)
+        fun bind(cardTask: CardTask) {
+            binding.tvTitle.text = cardTask.cardTitle
+            binding.tvDate.text = cardTask.cardDate
+            binding.tvHour.text = cardTask.cardHour
+            binding.tvDescription.text = cardTask.cardDescription
+            binding.checkbox.isChecked = cardTask.checked
 
         }
 
@@ -67,21 +58,21 @@ class CardTaskAdapter(
     }
 
 
-    class CardTaskComparator : DiffUtil.ItemCallback<CardAndItemTasks>(){
+    class CardTaskComparator : DiffUtil.ItemCallback<CardTask>(){
 
 
         override fun areItemsTheSame(
-            oldItem: CardAndItemTasks,
-            newItem: CardAndItemTasks,
+            oldItem: CardTask,
+            newItem: CardTask,
         ): Boolean {
             return oldItem === newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: CardAndItemTasks,
-            newItem: CardAndItemTasks,
+            oldItem: CardTask,
+            newItem: CardTask,
         ): Boolean {
-            return  oldItem.card.id == newItem.card.id
+            return  oldItem.id == newItem.id
         }
 
     }

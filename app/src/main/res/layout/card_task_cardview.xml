@@ -13,56 +13,45 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/cv_card_task_title"
+        <CheckBox
+            android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:text="teste"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="titulo do card"
-            style="@style/card_elements" />
+            app:layout_constraintStart_toEndOf="@id/checkbox"/>
 
         <TextView
-            android:id="@+id/cv_card_task_description"
-            style="@style/card_elements"
+            android:id="@+id/tv_date"
+            android:text="20/20/20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cv_card_task_title"
-            tools:text="aqui vai uma descrição do que colocar neste campo de texto"
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_card_task_items"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            tools:listitem="@layout/task_item"
-            tools:itemCount="5"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cv_card_task_description"/>
-
-       <TextView
-           android:id="@+id/tv_card_task_date"
-           style="@style/card_elements"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           tools:text="data 00/00/00"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintTop_toBottomOf="@id/rv_card_task_items" />
+            app:layout_constraintStart_toEndOf="@id/checkbox"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"/>
 
         <TextView
-            android:id="@+id/tv_card_task_hour"
-            style="@style/card_elements"
+            android:id="@+id/tv_hour"
+            android:text="80:50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="08:55"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_card_task_items"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_title"/>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:text="texto descrição de teste para inserir aqui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/checkbox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

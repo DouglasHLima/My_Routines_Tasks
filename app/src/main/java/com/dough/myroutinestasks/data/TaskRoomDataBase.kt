@@ -8,11 +8,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [CardTask::class,ItemTask::class], version = 1, exportSchema = false)
+@Database(entities = [CardTask::class], version = 1, exportSchema = false)
 public abstract class TaskRoomDataBase : RoomDatabase() {
 
     abstract fun cardTaskDao(): CardTaskDao
-    abstract fun itemTaskDao(): ItemTaskDao
+
 
     companion object{
         @Volatile
@@ -44,14 +44,13 @@ public abstract class TaskRoomDataBase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.cardTaskDao(),database.itemTaskDao())
+                    populateDatabase(database.cardTaskDao())
                 }
             }
         }
 
-        suspend fun populateDatabase(cardTaskDao: CardTaskDao, itemTaskDao: ItemTaskDao){
+        suspend fun populateDatabase(cardTaskDao: CardTaskDao){
             cardTaskDao.deleteAll()
-            itemTaskDao.deleteAllItem()
 
         }
     }
