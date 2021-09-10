@@ -7,16 +7,18 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dough.myroutinestasks.aplication.CardTaskAplication
+import com.dough.myroutinestasks.data.CardTask
+import com.dough.myroutinestasks.databinding.ActivityMainBinding
 import com.dough.myroutinestasks.ui.CardTaskAdapter
 import com.dough.myroutinestasks.viewmodel.CardTaskViewModelFactory
 import com.dough.myroutinestasks.viewmodel.TaskViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), CardTaskAdapter.OnItemClickListener {
+    private lateinit var binding: ActivityMainBinding
+    private val adapter = CardTaskAdapter(this)
     private val taskViewModel: TaskViewModel by viewModels{
         CardTaskViewModelFactory((application as CardTaskAplication).repository)
     }
@@ -24,26 +26,33 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.main_recycler_view)
-        val adapter = CardTaskAdapter(this)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.mainRecyclerView.adapter = adapter
+        binding.mainRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
-            val intent = Intent(this@MainActivity, NewTaskActivity::class.java)
-            startActivityForResult(intent, newTaskActivityRequestCode)
-        }
+        setListenners()
+
 
         taskViewModel.allTasks.observe(this)  { tasks ->
-            tasks?.let { adapter.submitList(it) }
+            tasks?.let {
+                adapter.submitList(it)
+            }
         }
+
 
 
     }
 
+    private fun setListenners() {
+
+        binding.fab.setOnClickListener {
+            val intent = Intent(this@MainActivity, NewTaskActivity::class.java)
+            startActivityForResult(intent, newTaskActivityRequestCode)
+        }
+
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -60,6 +69,13 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
+
+    override fun onCheckBoxClick(task: CardTask, isChecked: Boolean){
+        taskViewModel.updateTask(task, isChecked)
+    }
+
 
 }
 

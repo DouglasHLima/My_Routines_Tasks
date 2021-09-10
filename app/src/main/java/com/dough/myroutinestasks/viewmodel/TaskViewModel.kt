@@ -13,9 +13,11 @@ class TaskViewModel(private val repositoryCard: CardTaskRepository): ViewModel()
         repositoryCard.insertCardTask(cardTask)
     }
 
-    fun updateTask(cardTask: CardTask) = viewModelScope.launch {
-        repositoryCard.updateTask(cardTask)
+    fun updateTask(task: CardTask, isChecked: Boolean) = viewModelScope.launch {
+        repositoryCard.updateTask(task.copy(checked = isChecked))
     }
+
+
 
 
 }

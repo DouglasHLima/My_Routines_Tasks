@@ -16,7 +16,7 @@ interface CardTaskDao {
     suspend fun deleteAll()
 
     @Update
-    fun updateTask(vararg task: CardTask)
+    suspend fun updateTask(task: CardTask)
 
 
 }

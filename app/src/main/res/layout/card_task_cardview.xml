@@ -8,7 +8,7 @@
     android:layout_margin="3dp"
     app:cardElevation="@dimen/cardview_default_elevation"
     app:cardCornerRadius="10dp"
-    app:cardBackgroundColor="@color/design_default_color_primary">
+    app:cardBackgroundColor="@color/design_default_color_secondary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

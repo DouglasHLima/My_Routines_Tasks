@@ -1,15 +1,12 @@
 package com.dough.myroutinestasks.ui
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
-import androidx.lifecycle.LiveData
+import android.widget.AdapterView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dough.myroutinestasks.aplication.CardTaskAplication
+import com.dough.myroutinestasks.MainActivity
 import com.dough.myroutinestasks.data.CardTask
 import com.dough.myroutinestasks.databinding.CardTaskCardviewBinding
 import com.dough.myroutinestasks.ui.CardTaskAdapter.*
@@ -17,7 +14,7 @@ import com.dough.myroutinestasks.viewmodel.CardTaskViewModelFactory
 import com.dough.myroutinestasks.viewmodel.TaskViewModel
 
 class CardTaskAdapter(
-    private val context: Context,
+    private val listener: OnItemClickListener
 ) : androidx.recyclerview.widget.ListAdapter<CardTask, CardTaskViewHolder>(CardTaskComparator()){
 
 
@@ -37,12 +34,24 @@ class CardTaskAdapter(
             current.visibility = !current.visibility
             notifyItemChanged(position)
         }
-        holder.binding.checkbox.setOnClickListener {
-            current.checked = !current.checked
-        }
+
     }
 
-    class CardTaskViewHolder(val binding: CardTaskCardviewBinding):RecyclerView.ViewHolder(binding.root) {
+    inner class CardTaskViewHolder(val binding: CardTaskCardviewBinding):RecyclerView.ViewHolder(binding.root) {
+
+
+        init {
+            binding.apply {
+                checkbox.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onCheckBoxClick(task, checkbox.isChecked)
+                    }
+                }
+            }
+        }
+
 
         fun bind(cardTask: CardTask) {
             binding.tvTitle.text = cardTask.cardTitle
@@ -53,12 +62,19 @@ class CardTaskAdapter(
 
         }
 
+    }
+
+    interface OnItemClickListener{
+        fun onCheckBoxClick(task: CardTask, isChecked: Boolean)
 
 
     }
+}
 
 
-    class CardTaskComparator : DiffUtil.ItemCallback<CardTask>(){
+
+
+class CardTaskComparator : DiffUtil.ItemCallback<CardTask>(){
 
 
         override fun areItemsTheSame(
@@ -74,11 +90,6 @@ class CardTaskAdapter(
         ): Boolean {
             return  oldItem.id == newItem.id
         }
-
     }
-
-
-}
-
 
 
